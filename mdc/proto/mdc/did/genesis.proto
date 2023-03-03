@@ -1,0 +1,12 @@
+syntax = "proto3";
+package mdc.did;
+
+import "gogoproto/gogo.proto";
+import "mdc/did/params.proto";
+
+option go_package = "mdc/x/did/types";
+
+// GenesisState defines the did module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
