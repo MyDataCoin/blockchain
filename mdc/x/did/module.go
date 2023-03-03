@@ -6,6 +6,7 @@ import (
 	"fmt"
 	// this line is used by starport scaffolding # 1
 
+	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
@@ -86,6 +87,9 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 // ----------------------------------------------------------------------------
 // AppModule
 // ----------------------------------------------------------------------------
+func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
+
+}
 
 // AppModule implements the AppModule interface that defines the inter-dependent methods that modules need to implement
 type AppModule struct {
@@ -117,8 +121,8 @@ func (am AppModule) Route() sdk.Route { return sdk.Route{} }
 func (AppModule) QuerierRoute() string { return types.RouterKey }
 
 // Deprecated: use RegisterServices
-func (am AppModule) LegacyQuerierHandler(_ *codec.LegacyAmino) sdk.Querier {
-	return nil
+func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
+	return keeper.NewQuerier(am.keeper, legacyQuerierCdc)
 }
 
 // RegisterServices registers a gRPC query service to respond to the module-specific gRPC queries

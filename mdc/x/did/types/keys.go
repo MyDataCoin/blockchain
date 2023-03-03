@@ -14,6 +14,6 @@ const (
 	MemStoreKey = "mem_did"
 )
 
-func KeyPrefix(p string) []byte {
-	return []byte(p)
-}
+var (
+	DIDKeyPrefix = []byte{0x00}
+)
