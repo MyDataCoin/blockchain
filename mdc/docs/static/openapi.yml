@@ -45267,22 +45267,207 @@ paths:
                         }
       tags:
         - Query
-  /mdc/did/params:
+  /mdc/did/{did_base64}:
     get:
       summary: Parameters queries the parameters of the module.
-      operationId: MdcDidParams
+      operationId: MdcDidDID
       responses:
         '200':
           description: A successful response.
           schema:
             type: object
             properties:
-              params:
-                description: params holds all the parameters of this module.
+              did_document_with_seq:
                 type: object
-            description: >-
-              QueryParamsResponse is response type for the Query/Params RPC
-              method.
+                properties:
+                  document:
+                    type: object
+                    properties:
+                      contexts:
+                        type: object
+                        properties:
+                          values:
+                            type: array
+                            items:
+                              type: string
+                        description: >-
+                          Strings defines a JSON-LD string array format which is
+                          marshalled to a single string if the array length is
+                          1.
+                      id:
+                        type: string
+                      controller:
+                        type: object
+                        properties:
+                          values:
+                            type: array
+                            items:
+                              type: string
+                        description: >-
+                          Strings defines a JSON-LD string array format which is
+                          marshalled to a single string if the array length is
+                          1.
+                      verification_methods:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            type:
+                              type: string
+                            controller:
+                              type: string
+                            public_key_base58:
+                              type: string
+                          title: VerificationMethod defines a W3C verification method
+                      authentications:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            verification_method_id:
+                              type: string
+                            verification_method:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                type:
+                                  type: string
+                                controller:
+                                  type: string
+                                public_key_base58:
+                                  type: string
+                              title: >-
+                                VerificationMethod defines a W3C verification
+                                method
+                          title: >-
+                            VerificationRelationship defines a W3C verification
+                            relationship
+                        title: >-
+                          TODO: the repeated gogoproto.customtype has an issue:
+                          https://github.com/gogo/protobuf/issues/478
+                      assertion_methods:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            verification_method_id:
+                              type: string
+                            verification_method:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                type:
+                                  type: string
+                                controller:
+                                  type: string
+                                public_key_base58:
+                                  type: string
+                              title: >-
+                                VerificationMethod defines a W3C verification
+                                method
+                          title: >-
+                            VerificationRelationship defines a W3C verification
+                            relationship
+                      key_agreements:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            verification_method_id:
+                              type: string
+                            verification_method:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                type:
+                                  type: string
+                                controller:
+                                  type: string
+                                public_key_base58:
+                                  type: string
+                              title: >-
+                                VerificationMethod defines a W3C verification
+                                method
+                          title: >-
+                            VerificationRelationship defines a W3C verification
+                            relationship
+                      capability_invocations:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            verification_method_id:
+                              type: string
+                            verification_method:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                type:
+                                  type: string
+                                controller:
+                                  type: string
+                                public_key_base58:
+                                  type: string
+                              title: >-
+                                VerificationMethod defines a W3C verification
+                                method
+                          title: >-
+                            VerificationRelationship defines a W3C verification
+                            relationship
+                      capability_delegations:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            verification_method_id:
+                              type: string
+                            verification_method:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                type:
+                                  type: string
+                                controller:
+                                  type: string
+                                public_key_base58:
+                                  type: string
+                              title: >-
+                                VerificationMethod defines a W3C verification
+                                method
+                          title: >-
+                            VerificationRelationship defines a W3C verification
+                            relationship
+                      services:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            type:
+                              type: string
+                            service_endpoint:
+                              type: string
+                          description: Service defines a service in the W3C DID Document.
+                    description: >-
+                      NOTE: All 'json_name' and 'gogoproto.customtype' tags are
+                      for panacea-core to unmarshal the v1.3 genesis which is in
+                      the W3C JSON-LD format.
+                            On the other hand, the panacea-core and cosmos-sdk don't use those tags to marshal result to JSON (via grpc-gateway).
+                    title: DIDDocument defines a W3C DID Document
+                  sequence:
+                    type: string
+                    format: uint64
+                description: >-
+                  DIDDocumentWithSeq defines a message for DID Document with a
+                  sequence number for preventing replay attacks.
         default:
           description: An unexpected error response.
           schema:
@@ -45301,6 +45486,11 @@ paths:
                     '@type':
                       type: string
                   additionalProperties: {}
+      parameters:
+        - name: did_base64
+          in: path
+          required: true
+          type: string
       tags:
         - Query
 definitions:
@@ -74952,13 +75142,565 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
-  mdc.did.Params:
-    type: object
-    description: Params defines the parameters for the module.
-  mdc.did.QueryParamsResponse:
+  mdc.did.DIDDocument:
     type: object
     properties:
-      params:
-        description: params holds all the parameters of this module.
+      contexts:
         type: object
-    description: QueryParamsResponse is response type for the Query/Params RPC method.
+        properties:
+          values:
+            type: array
+            items:
+              type: string
+        description: >-
+          Strings defines a JSON-LD string array format which is marshalled to a
+          single string if the array length is 1.
+      id:
+        type: string
+      controller:
+        type: object
+        properties:
+          values:
+            type: array
+            items:
+              type: string
+        description: >-
+          Strings defines a JSON-LD string array format which is marshalled to a
+          single string if the array length is 1.
+      verification_methods:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+            controller:
+              type: string
+            public_key_base58:
+              type: string
+          title: VerificationMethod defines a W3C verification method
+      authentications:
+        type: array
+        items:
+          type: object
+          properties:
+            verification_method_id:
+              type: string
+            verification_method:
+              type: object
+              properties:
+                id:
+                  type: string
+                type:
+                  type: string
+                controller:
+                  type: string
+                public_key_base58:
+                  type: string
+              title: VerificationMethod defines a W3C verification method
+          title: VerificationRelationship defines a W3C verification relationship
+        title: >-
+          TODO: the repeated gogoproto.customtype has an issue:
+          https://github.com/gogo/protobuf/issues/478
+      assertion_methods:
+        type: array
+        items:
+          type: object
+          properties:
+            verification_method_id:
+              type: string
+            verification_method:
+              type: object
+              properties:
+                id:
+                  type: string
+                type:
+                  type: string
+                controller:
+                  type: string
+                public_key_base58:
+                  type: string
+              title: VerificationMethod defines a W3C verification method
+          title: VerificationRelationship defines a W3C verification relationship
+      key_agreements:
+        type: array
+        items:
+          type: object
+          properties:
+            verification_method_id:
+              type: string
+            verification_method:
+              type: object
+              properties:
+                id:
+                  type: string
+                type:
+                  type: string
+                controller:
+                  type: string
+                public_key_base58:
+                  type: string
+              title: VerificationMethod defines a W3C verification method
+          title: VerificationRelationship defines a W3C verification relationship
+      capability_invocations:
+        type: array
+        items:
+          type: object
+          properties:
+            verification_method_id:
+              type: string
+            verification_method:
+              type: object
+              properties:
+                id:
+                  type: string
+                type:
+                  type: string
+                controller:
+                  type: string
+                public_key_base58:
+                  type: string
+              title: VerificationMethod defines a W3C verification method
+          title: VerificationRelationship defines a W3C verification relationship
+      capability_delegations:
+        type: array
+        items:
+          type: object
+          properties:
+            verification_method_id:
+              type: string
+            verification_method:
+              type: object
+              properties:
+                id:
+                  type: string
+                type:
+                  type: string
+                controller:
+                  type: string
+                public_key_base58:
+                  type: string
+              title: VerificationMethod defines a W3C verification method
+          title: VerificationRelationship defines a W3C verification relationship
+      services:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+            service_endpoint:
+              type: string
+          description: Service defines a service in the W3C DID Document.
+    description: >-
+      NOTE: All 'json_name' and 'gogoproto.customtype' tags are for panacea-core
+      to unmarshal the v1.3 genesis which is in the W3C JSON-LD format.
+            On the other hand, the panacea-core and cosmos-sdk don't use those tags to marshal result to JSON (via grpc-gateway).
+    title: DIDDocument defines a W3C DID Document
+  mdc.did.DIDDocumentWithSeq:
+    type: object
+    properties:
+      document:
+        type: object
+        properties:
+          contexts:
+            type: object
+            properties:
+              values:
+                type: array
+                items:
+                  type: string
+            description: >-
+              Strings defines a JSON-LD string array format which is marshalled
+              to a single string if the array length is 1.
+          id:
+            type: string
+          controller:
+            type: object
+            properties:
+              values:
+                type: array
+                items:
+                  type: string
+            description: >-
+              Strings defines a JSON-LD string array format which is marshalled
+              to a single string if the array length is 1.
+          verification_methods:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                type:
+                  type: string
+                controller:
+                  type: string
+                public_key_base58:
+                  type: string
+              title: VerificationMethod defines a W3C verification method
+          authentications:
+            type: array
+            items:
+              type: object
+              properties:
+                verification_method_id:
+                  type: string
+                verification_method:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    controller:
+                      type: string
+                    public_key_base58:
+                      type: string
+                  title: VerificationMethod defines a W3C verification method
+              title: VerificationRelationship defines a W3C verification relationship
+            title: >-
+              TODO: the repeated gogoproto.customtype has an issue:
+              https://github.com/gogo/protobuf/issues/478
+          assertion_methods:
+            type: array
+            items:
+              type: object
+              properties:
+                verification_method_id:
+                  type: string
+                verification_method:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    controller:
+                      type: string
+                    public_key_base58:
+                      type: string
+                  title: VerificationMethod defines a W3C verification method
+              title: VerificationRelationship defines a W3C verification relationship
+          key_agreements:
+            type: array
+            items:
+              type: object
+              properties:
+                verification_method_id:
+                  type: string
+                verification_method:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    controller:
+                      type: string
+                    public_key_base58:
+                      type: string
+                  title: VerificationMethod defines a W3C verification method
+              title: VerificationRelationship defines a W3C verification relationship
+          capability_invocations:
+            type: array
+            items:
+              type: object
+              properties:
+                verification_method_id:
+                  type: string
+                verification_method:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    controller:
+                      type: string
+                    public_key_base58:
+                      type: string
+                  title: VerificationMethod defines a W3C verification method
+              title: VerificationRelationship defines a W3C verification relationship
+          capability_delegations:
+            type: array
+            items:
+              type: object
+              properties:
+                verification_method_id:
+                  type: string
+                verification_method:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    controller:
+                      type: string
+                    public_key_base58:
+                      type: string
+                  title: VerificationMethod defines a W3C verification method
+              title: VerificationRelationship defines a W3C verification relationship
+          services:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                type:
+                  type: string
+                service_endpoint:
+                  type: string
+              description: Service defines a service in the W3C DID Document.
+        description: >-
+          NOTE: All 'json_name' and 'gogoproto.customtype' tags are for
+          panacea-core to unmarshal the v1.3 genesis which is in the W3C JSON-LD
+          format.
+                On the other hand, the panacea-core and cosmos-sdk don't use those tags to marshal result to JSON (via grpc-gateway).
+        title: DIDDocument defines a W3C DID Document
+      sequence:
+        type: string
+        format: uint64
+    description: >-
+      DIDDocumentWithSeq defines a message for DID Document with a sequence
+      number for preventing replay attacks.
+  mdc.did.MsgCreateDIDResponse:
+    type: object
+  mdc.did.QueryDIDResponse:
+    type: object
+    properties:
+      did_document_with_seq:
+        type: object
+        properties:
+          document:
+            type: object
+            properties:
+              contexts:
+                type: object
+                properties:
+                  values:
+                    type: array
+                    items:
+                      type: string
+                description: >-
+                  Strings defines a JSON-LD string array format which is
+                  marshalled to a single string if the array length is 1.
+              id:
+                type: string
+              controller:
+                type: object
+                properties:
+                  values:
+                    type: array
+                    items:
+                      type: string
+                description: >-
+                  Strings defines a JSON-LD string array format which is
+                  marshalled to a single string if the array length is 1.
+              verification_methods:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    controller:
+                      type: string
+                    public_key_base58:
+                      type: string
+                  title: VerificationMethod defines a W3C verification method
+              authentications:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    verification_method_id:
+                      type: string
+                    verification_method:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                        controller:
+                          type: string
+                        public_key_base58:
+                          type: string
+                      title: VerificationMethod defines a W3C verification method
+                  title: >-
+                    VerificationRelationship defines a W3C verification
+                    relationship
+                title: >-
+                  TODO: the repeated gogoproto.customtype has an issue:
+                  https://github.com/gogo/protobuf/issues/478
+              assertion_methods:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    verification_method_id:
+                      type: string
+                    verification_method:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                        controller:
+                          type: string
+                        public_key_base58:
+                          type: string
+                      title: VerificationMethod defines a W3C verification method
+                  title: >-
+                    VerificationRelationship defines a W3C verification
+                    relationship
+              key_agreements:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    verification_method_id:
+                      type: string
+                    verification_method:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                        controller:
+                          type: string
+                        public_key_base58:
+                          type: string
+                      title: VerificationMethod defines a W3C verification method
+                  title: >-
+                    VerificationRelationship defines a W3C verification
+                    relationship
+              capability_invocations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    verification_method_id:
+                      type: string
+                    verification_method:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                        controller:
+                          type: string
+                        public_key_base58:
+                          type: string
+                      title: VerificationMethod defines a W3C verification method
+                  title: >-
+                    VerificationRelationship defines a W3C verification
+                    relationship
+              capability_delegations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    verification_method_id:
+                      type: string
+                    verification_method:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                        controller:
+                          type: string
+                        public_key_base58:
+                          type: string
+                      title: VerificationMethod defines a W3C verification method
+                  title: >-
+                    VerificationRelationship defines a W3C verification
+                    relationship
+              services:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    service_endpoint:
+                      type: string
+                  description: Service defines a service in the W3C DID Document.
+            description: >-
+              NOTE: All 'json_name' and 'gogoproto.customtype' tags are for
+              panacea-core to unmarshal the v1.3 genesis which is in the W3C
+              JSON-LD format.
+                    On the other hand, the panacea-core and cosmos-sdk don't use those tags to marshal result to JSON (via grpc-gateway).
+            title: DIDDocument defines a W3C DID Document
+          sequence:
+            type: string
+            format: uint64
+        description: >-
+          DIDDocumentWithSeq defines a message for DID Document with a sequence
+          number for preventing replay attacks.
+  mdc.did.Service:
+    type: object
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+      service_endpoint:
+        type: string
+    description: Service defines a service in the W3C DID Document.
+  mdc.did.Strings:
+    type: object
+    properties:
+      values:
+        type: array
+        items:
+          type: string
+    description: >-
+      Strings defines a JSON-LD string array format which is marshalled to a
+      single string if the array length is 1.
+  mdc.did.VerificationMethod:
+    type: object
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+      controller:
+        type: string
+      public_key_base58:
+        type: string
+    title: VerificationMethod defines a W3C verification method
+  mdc.did.VerificationRelationship:
+    type: object
+    properties:
+      verification_method_id:
+        type: string
+      verification_method:
+        type: object
+        properties:
+          id:
+            type: string
+          type:
+            type: string
+          controller:
+            type: string
+          public_key_base58:
+            type: string
+        title: VerificationMethod defines a W3C verification method
+    title: VerificationRelationship defines a W3C verification relationship

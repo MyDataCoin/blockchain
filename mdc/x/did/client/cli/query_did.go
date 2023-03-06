@@ -2,33 +2,47 @@ package cli
 
 import (
 	"context"
+	"encoding/base64"
+	"strconv"
+
+	"mdc/x/did/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
-	"mdc/x/did/types"
 )
 
-func CmdQueryParams() *cobra.Command {
+var _ = strconv.Itoa(0)
+
+func CmdDID() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "params",
-		Short: "shows the parameters of the module",
-		Args:  cobra.NoArgs,
+		Use:   "get-did [did]",
+		Short: "Get a DID",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
-			queryClient := types.NewQueryClient(clientCtx)
-
-			res, err := queryClient.Params(context.Background(), &types.QueryParamsRequest{})
+			id, err := types.ParseDID(args[0])
 			if err != nil {
 				return err
 			}
 
+			queryClient := types.NewQueryClient(clientCtx)
+
+			params := &types.QueryDIDRequest{
+				DidBase64: base64.StdEncoding.EncodeToString([]byte(id)),
+			}
+
+			res, err := queryClient.DID(context.Background(), params)
+
+			if err != nil {
+				return err
+			}
 			return clientCtx.PrintProto(res)
 		},
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
-
 	return cmd
 }
+

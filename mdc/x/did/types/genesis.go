@@ -28,4 +28,3 @@ func (data GenesisState) Validate() error {
 	}
 	return nil
 }
-
