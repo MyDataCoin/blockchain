@@ -11,7 +11,6 @@ import (
 func (m msgServer) CreateDID(goCtx context.Context, msg *types.MsgCreateDID) (*types.MsgCreateDIDResponse, error) {
 	keeper := m.Keeper
 	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	cur := keeper.GetDIDDocument(ctx, msg.Did)
 	if !cur.Empty() {
 		if cur.Deactivated() {

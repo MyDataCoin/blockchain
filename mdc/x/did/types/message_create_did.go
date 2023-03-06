@@ -2,7 +2,7 @@ package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	// sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 const TypeMsgCreateDID = "create_did"
@@ -41,9 +41,9 @@ func (msg *MsgCreateDID) GetSignBytes() []byte {
 }
 
 func (msg *MsgCreateDID) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.FromAddress)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
-	}
+	// _, err := sdk.AccAddressFromBech32(msg.FromAddress)
+	// if err != nil {
+	// 	return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	// }
 	return nil
 }

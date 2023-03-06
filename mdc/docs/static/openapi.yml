@@ -45267,9 +45267,9 @@ paths:
                         }
       tags:
         - Query
-  /mdc/did/{did_base64}:
+  /mdc/did/did/{didBase64}:
     get:
-      summary: Parameters queries the parameters of the module.
+      summary: Queries a list of DID items.
       operationId: MdcDidDID
       responses:
         '200':
@@ -45277,7 +45277,7 @@ paths:
           schema:
             type: object
             properties:
-              did_document_with_seq:
+              didDocumentWithSeq:
                 type: object
                 properties:
                   document:
@@ -45487,7 +45487,7 @@ paths:
                       type: string
                   additionalProperties: {}
       parameters:
-        - name: did_base64
+        - name: didBase64
           in: path
           required: true
           type: string
@@ -75475,7 +75475,7 @@ definitions:
   mdc.did.QueryDIDResponse:
     type: object
     properties:
-      did_document_with_seq:
+      didDocumentWithSeq:
         type: object
         properties:
           document:

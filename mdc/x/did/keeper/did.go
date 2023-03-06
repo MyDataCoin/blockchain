@@ -21,8 +21,7 @@ func (k Keeper) GetDIDDocument(ctx sdk.Context, did string) types.DIDDocumentWit
 		return types.DIDDocumentWithSeq{}
 	}
 	var doc types.DIDDocumentWithSeq
-	//maybe tut oshibka
-	k.cdc.MustMarshalLengthPrefixed(&doc)
+	k.cdc.MustUnmarshalLengthPrefixed(bz,&doc)
 	return doc
 }
 
