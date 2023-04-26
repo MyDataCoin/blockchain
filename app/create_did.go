@@ -50,6 +50,7 @@ func createDID(ctx client.Context) func(http.ResponseWriter, *http.Request) {
 			http.Error(w, "invalid method", http.StatusMethodNotAllowed)
 			return
 		}
+		
 		intermediateVariable, err := io.ReadAll(r.Body)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -61,7 +62,6 @@ func createDID(ctx client.Context) func(http.ResponseWriter, *http.Request) {
 			return
 		}
 		inBuf := bufio.NewReader(ctx.Input)
-
 		mnemonic, bip39Passphrase, err := readBIP39ParamsFrom(false, inBuf)
 		if err != nil {
 			http.Error(w, err.Error(), 500)
@@ -72,13 +72,11 @@ func createDID(ctx client.Context) func(http.ResponseWriter, *http.Request) {
 			http.Error(w, err.Error(), 500)
 			return
 		}
-
 		msg, err := newMsgCreateDID(InpData.Address, privKey)
 		if err != nil {
 			http.Error(w, err.Error(), 500)
 			return
 		}
-		// _ = msg
 		if err := savePrivKeyToKeyStore(msg.VerificationMethodId, privKey, inBuf); err != nil {
 			http.Error(w, "failed to save in keystore", 500)
 			return
